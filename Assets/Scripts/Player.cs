@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -13,10 +14,12 @@ public class Player : MonoBehaviour
     private float _jumpHeight = 5f;
     private float _yVelocity;
     private bool _canDoubleJump = true;
-    //coins variable
-    public int coins;
 
-    // Start is called before the first frame update
+    private bool _isAlive = true;
+
+    private int _coins;
+    private int _lives = 3;
+
     void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -24,9 +27,10 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("The Character Controller is NULL");
         }
+        UIManager.Instance.UpdateLives = _lives;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
 
@@ -54,5 +58,20 @@ public class Player : MonoBehaviour
 
         velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    public void AddCoins()
+    {
+        ++_coins;
+        UIManager.Instance.UpdateCoins = _coins;
+    }
+    public void LoseLife()
+    {
+        --_lives;
+        UIManager.Instance.UpdateLives = _lives;
+        if (_lives == 0)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 }

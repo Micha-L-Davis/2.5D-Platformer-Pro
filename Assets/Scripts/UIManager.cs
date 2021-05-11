@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Text _coinText;
+    [SerializeField]
+    private Text _livesText;
 
     public int UpdateCoins
     {
@@ -29,6 +31,19 @@ public class UIManager : MonoBehaviour
         set
         {
             _coinText.text = "Coins: " + value;
+        }
+    }
+
+    public int UpdateLives
+    {
+        get
+        {
+            return UpdateLives;
+        }
+
+        set
+        {
+            _livesText.text = "Lives: " + value;
         }
     }
 
