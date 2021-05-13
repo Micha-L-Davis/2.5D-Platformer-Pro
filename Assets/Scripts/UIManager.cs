@@ -1,54 +1,21 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    private static UIManager _instance;
-    public static UIManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-                Debug.LogError("UI Manager is NULL");
-            return _instance;
-        }
-    }
-
     [SerializeField]
-    private Text _coinText;
-    [SerializeField]
-    private Text _livesText;
+    private Text _coinText, _livesText;
 
-    public int UpdateCoins
+    public void UpdateCoinDisplay(int coins)
     {
-        get
-        {
-            return UpdateCoins;
-        }
-
-        set
-        {
-            _coinText.text = "Coins: " + value;
-        }
+        _coinText.text = "Coins: " + coins.ToString();
     }
 
-    public int UpdateLives
+    public void UpdateLivesDisplay(int lives)
     {
-        get
-        {
-            return UpdateLives;
-        }
-
-        set
-        {
-            _livesText.text = "Lives: " + value;
-        }
+        _livesText.text = "Lives: " + lives.ToString();
     }
-
-    private void Awake()
-    {
-        _instance = this;
-    }
+   
 }

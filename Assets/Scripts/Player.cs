@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,37 +9,48 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 5.0f;
     [SerializeField]
-    private float _gravity = -9.8f;
+    private float _gravity = 1.0f;
     [SerializeField]
-    private float _jumpHeight = 5f;
+    private float _jumpHeight = 15.0f;
     private float _yVelocity;
-    private bool _canDoubleJump = true;
-
-    private bool _isAlive = true;
-
+    private bool _canDoubleJump = false;
+    [SerializeField]
     private int _coins;
+    private UIManager _uiManager;
+    [SerializeField]
     private int _lives = 3;
+    [SerializeField]
+    private float _pushPower = 3;
+    private bool _canWallJump;
+    private Vector3 _wallSurfaceNormal;
 
+    private Vector3 _direction, _velocity;
+
+    // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponent<CharacterController>();
-        if (_controller == null)
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        if (_uiManager == null)
         {
-            Debug.LogError("The Character Controller is NULL");
+            Debug.LogError("The UI Manager is NULL."); 
         }
-        UIManager.Instance.UpdateLives = _lives;
+
+        _uiManager.UpdateLivesDisplay(_lives);
     }
 
-
+    // Update is called once per frame
     void Update()
     {
+        float horizontalInput = Input.GetAxis("Horizontal");
 
-        float horizontal = Input.GetAxis("Horizontal");
-        Vector3 direction = new Vector3(horizontal, 0f, 0f);
-        Vector3 velocity = direction * _speed; 
 
-        if (_controller.isGrounded)
+        if (_controller.isGrounded == true)
         {
+            _canWallJump = false;
+            _direction = new Vector3(horizontalInput, 0, 0);
+            _velocity = _direction * _speed;
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _yVelocity = _jumpHeight;
@@ -48,28 +59,76 @@ public class Player : MonoBehaviour
         }
         else
         {
-            _yVelocity += _gravity;
-            if (_canDoubleJump == true && Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                _yVelocity += _jumpHeight;
-                _canDoubleJump = false;
+                if (_canWallJump == true)
+                {
+                    _canDoubleJump = false;
+                    _direction = _wallSurfaceNormal;
+                    _velocity = _direction * _speed;
+                    _yVelocity += _jumpHeight;
+                }
+                if (_canDoubleJump == true)
+                {
+                    _yVelocity += _jumpHeight;
+                    _canDoubleJump = false;
+                }
             }
+
+            _yVelocity -= _gravity;
         }
 
-        velocity.y = _yVelocity;
-        _controller.Move(velocity * Time.deltaTime);
+        _velocity.y = _yVelocity;
+
+        _controller.Move(_velocity * Time.deltaTime);
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.transform.tag == "MovingBox")
+        {
+            Rigidbody rb = hit.collider.attachedRigidbody;
+            if (rb != null)
+            {
+                Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, 0);
+                rb.velocity = pushDir * _pushPower;
+            }
+        }
+        //check for moving box
+        //confirm it has a rigidbody
+        //declare push power var up top
+        //calcluate push direction
+        //apply push power to movingbox
+
+
+        if (!_controller.isGrounded && hit.transform.tag == "Wall")
+        {
+            _canWallJump = true;
+            _wallSurfaceNormal = hit.normal;
+        }
+        
+    }
+
 
     public void AddCoins()
     {
-        ++_coins;
-        UIManager.Instance.UpdateCoins = _coins;
+        _coins++;
+
+        _uiManager.UpdateCoinDisplay(_coins);
     }
-    public void LoseLife()
+
+    public int CoinCount()
     {
-        --_lives;
-        UIManager.Instance.UpdateLives = _lives;
-        if (_lives == 0)
+        return _coins;
+    }
+
+    public void Damage()
+    {
+        _lives--;
+
+        _uiManager.UpdateLivesDisplay(_lives);
+
+        if (_lives < 1)
         {
             SceneManager.LoadScene(0);
         }
