@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     CharacterController _controller;
     Animator _anim;
     bool _isGrabbing;
+    private LedgeGrab _activeLedge;
 
     void Start()
     {
@@ -43,14 +44,13 @@ public class Player : MonoBehaviour
 
     void CalculateMovement()
     {
-        if (_isGrabbing && Input.GetKey(KeyCode.Space))
+        if (_isGrabbing && Input.GetKey(KeyCode.E))
         {
             _anim.SetTrigger("ClimbUp");
         }
         if (_controller.isGrounded)
         {
             _anim.SetBool("isGrounded", true);
-            _yVelocity = 0;
             float horizInput = Input.GetAxisRaw("Horizontal");
             _direction = new Vector3(0, 0, horizInput);
             _anim.SetFloat("Speed", Mathf.Abs(horizInput));
@@ -77,13 +77,21 @@ public class Player : MonoBehaviour
         _controller.Move(_velocity * Time.deltaTime);
     }
 
-    public void GrabLedge(Vector3 position)
+    public void GrabLedge(Vector3 position, LedgeGrab currentLedge)
     {
         _anim.SetBool("LedgeGrab", true);
         _anim.SetFloat("Speed", 0f);
         _controller.enabled = false;
         transform.position = position;
+        _activeLedge = currentLedge;
         _isGrabbing = true;
         
+    }
+
+    public void ClimbUpComplete()
+    {
+        transform.position = _activeLedge.GetStandPos();
+        _anim.SetBool("LedgeGrab", false);
+        _controller.enabled = true;
     }
 }

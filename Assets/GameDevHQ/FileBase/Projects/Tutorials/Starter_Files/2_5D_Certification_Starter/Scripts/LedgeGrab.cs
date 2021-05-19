@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class LedgeGrab : MonoBehaviour
 {
+    [SerializeField]
+    Vector3 _handPos, _standPos;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("LedgeGrabChecker"))
         {
             Player player = other.GetComponentInParent<Player>();
-            player.GrabLedge(new Vector3(-0.16f, 67.97f, 122.99f));
-        }
+            if (player != null)
+            {
+                player.GrabLedge(_handPos, this);
+            }
+        }   
+    }
+    public Vector3 GetStandPos()
+    {
+        return _standPos;
     }
 }

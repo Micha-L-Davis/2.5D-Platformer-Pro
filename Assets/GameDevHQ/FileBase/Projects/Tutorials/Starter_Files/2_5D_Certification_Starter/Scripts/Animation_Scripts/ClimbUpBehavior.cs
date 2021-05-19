@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ClimbUpBehavior : StateMachineBehaviour
 {
+    private Vector3 _finalPos;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
@@ -20,7 +21,10 @@ public class ClimbUpBehavior : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Player player = animator.GetComponentInParent<Player>();
-        player.transform.position = new Vector3(-0.16f, 74.68f, 123.99f);
+        if (player != null)
+        {
+            player.ClimbUpComplete();
+        }
 
     }
 
