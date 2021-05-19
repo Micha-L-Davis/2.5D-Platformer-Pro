@@ -9,16 +9,17 @@ public class Player : MonoBehaviour
     //direction
     //jumpHeight
     [SerializeField]
-    float _speed = 8;
+    float _speed = 12f;
     [SerializeField]
-    float _gravity = -0.25f;
+    float _gravity = -7f;
     Vector3 _direction;
     Vector3 _velocity;
     [SerializeField]
-    float _jumpHeight = 4;
+    float _jumpHeight = 1.1f;
     float _yVelocity;
     CharacterController _controller;
     Animator _anim;
+    bool _isGrabbing;
 
     void Start()
     {
@@ -37,7 +38,15 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        
+        CalculateMovement();
+    }
+
+    void CalculateMovement()
+    {
+        if (_isGrabbing && Input.GetKey(KeyCode.Space))
+        {
+            _anim.SetTrigger("ClimbUp");
+        }
         if (_controller.isGrounded)
         {
             _anim.SetBool("isGrounded", true);
@@ -48,7 +57,7 @@ public class Player : MonoBehaviour
             _velocity = _direction * _speed;
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _yVelocity += _jumpHeight;
+                _yVelocity = _jumpHeight;
                 _anim.SetTrigger("Jumped");
             }
         }
@@ -66,13 +75,15 @@ public class Player : MonoBehaviour
 
         _velocity.y += _yVelocity;
         _controller.Move(_velocity * Time.deltaTime);
+    }
+
+    public void GrabLedge(Vector3 position)
+    {
+        _anim.SetBool("LedgeGrab", true);
+        _anim.SetFloat("Speed", 0f);
+        _controller.enabled = false;
+        transform.position = position;
+        _isGrabbing = true;
         
-        //if grounded
-        //calculate movement direciton based on user inputs
-        //
-        //if jump
-        //adjust jump height
-        //
-        //move
     }
 }
