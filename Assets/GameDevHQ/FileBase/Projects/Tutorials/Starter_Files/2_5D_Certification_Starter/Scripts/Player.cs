@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
         else
         {
             _anim.SetBool("isGrounded", false);
-            _yVelocity += _gravity * Time.deltaTime;
+            _yVelocity += _gravity* Time.deltaTime; 
         }
 
         if (_controller.velocity != Vector3.zero)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class LedgeGrab : MonoBehaviour
 {
     [SerializeField]
-    Vector3 _handPos, _standPos;
+    Transform _grabPos, _standPos;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("LedgeGrabChecker"))
@@ -13,12 +13,12 @@ public class LedgeGrab : MonoBehaviour
             Player player = other.GetComponentInParent<Player>();
             if (player != null)
             {
-                player.GrabLedge(_handPos, this);
+                player.GrabLedge(_grabPos.position, this);
             }
         }   
     }
     public Vector3 GetStandPos()
     {
-        return _standPos;
+        return _standPos.position;
     }
 }
