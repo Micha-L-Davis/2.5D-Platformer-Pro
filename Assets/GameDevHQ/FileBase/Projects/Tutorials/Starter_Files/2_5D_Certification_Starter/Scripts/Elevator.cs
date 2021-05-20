@@ -18,7 +18,6 @@ public class Elevator : MonoBehaviour
         if (_floorList.Count > 0 && _floorList[_currentTarget] != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, _floorList[_currentTarget].position, _speed * Time.deltaTime);
-            //float distance = Vector3.Distance(transform.position, _floorList[_currentTarget].position);
             if (transform.position == _floorList[_currentTarget].position && _targetReached == false)
             {
                 _targetReached = true;
@@ -40,10 +39,6 @@ public class Elevator : MonoBehaviour
                     _reverse = false;
                 }
             }
-            //else if (transform.position == _floorList[_currentTarget].position && _targetReached == true)
-            //{
-            //    StartCoroutine(PauseAtFloor());
-            //}
         }
     }
 

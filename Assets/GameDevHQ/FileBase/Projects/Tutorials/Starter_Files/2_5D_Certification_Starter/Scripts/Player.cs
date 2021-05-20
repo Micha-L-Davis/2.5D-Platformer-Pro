@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    //speed
-    //gravity
-    //direction
-    //jumpHeight
     [SerializeField]
     float _speed = 12f;
     [SerializeField]
@@ -20,7 +16,8 @@ public class Player : MonoBehaviour
     CharacterController _controller;
     Animator _anim;
     bool _isGrabbing;
-    private LedgeGrab _activeLedge;
+    LedgeGrab _activeLedge;
+    int _coins;
 
     void Start()
     {
@@ -93,5 +90,16 @@ public class Player : MonoBehaviour
         transform.position = _activeLedge.GetStandPos();
         _anim.SetBool("LedgeGrab", false);
         _controller.enabled = true;
+    }
+
+    public void AddCoins()
+    {
+        _coins++;
+
+        //_uiManager.UpdateCoinDisplay(_coins);
+    }
+    public int CoinCount()
+    {
+        return _coins;
     }
 }
