@@ -17,7 +17,11 @@ public class Player : MonoBehaviour
     Animator _anim;
     bool _isGrabbing;
     LedgeGrab _activeLedge;
+    Ladder _activeLadder;
     int _coins;
+    public bool onLadder;
+    [SerializeField]
+    float _climbSpeed = 3;
 
     void Start()
     {
@@ -45,32 +49,43 @@ public class Player : MonoBehaviour
         {
             _anim.SetTrigger("ClimbUp");
         }
-        if (_controller.isGrounded)
+        if (onLadder)
         {
-            _anim.SetBool("isGrounded", true);
-            float horizInput = Input.GetAxisRaw("Horizontal");
-            _direction = new Vector3(0, 0, horizInput);
-            _anim.SetFloat("Speed", Mathf.Abs(horizInput));
-            _velocity = _direction * _speed;
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _yVelocity = _jumpHeight;
-                _anim.SetTrigger("Jumped");
-            }
+            float vertInput = Input.GetAxis("Vertical");
+            _direction = new Vector3(0, vertInput, 0);
+            _anim.SetFloat("ClimbSpeed", Mathf.Abs(vertInput));
+            _velocity = _direction * _climbSpeed;
         }
         else
         {
-            _anim.SetBool("isGrounded", false);
-            _yVelocity += _gravity* Time.deltaTime; 
-        }
+            if (_controller.isGrounded)
+            {
+                _anim.SetBool("isGrounded", true);
+                float horizInput = Input.GetAxisRaw("Horizontal");
+                _direction = new Vector3(0, 0, horizInput);
+                _anim.SetFloat("Speed", Mathf.Abs(horizInput));
+                _velocity = _direction * _speed;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    _yVelocity = _jumpHeight;
+                    _anim.SetTrigger("Jumped");
+                }
+            }
+            else if (!_controller.isGrounded)
+            {
+                _anim.SetBool("isGrounded", false);
+                _yVelocity += _gravity* Time.deltaTime; 
+            }
 
-        if (_controller.velocity != Vector3.zero)
-        {
-            Quaternion toRotation = Quaternion.LookRotation(_direction, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 1000 * Time.deltaTime);
+            if (_controller.velocity != Vector3.zero)
+            {
+                Quaternion toRotation = Quaternion.LookRotation(_direction, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 1000 * Time.deltaTime);
+            }
+ 
+                _velocity.y += _yVelocity;
         }
-
-        _velocity.y += _yVelocity;
+        
         _controller.Move(_velocity * Time.deltaTime);
     }
 
@@ -102,4 +117,32 @@ public class Player : MonoBehaviour
     {
         return _coins;
     }
+
+    //public bool OnLadder
+    //{
+    //    get { return _onLadder; }
+    //    set
+    //    {
+    //        _anim.SetBool("onLadder", value);
+    //        _onLadder = value;
+    //        if (value == true)
+    //        {
+    //            _controller.enabled = false;
+    //        }
+    //    }
+    //}
+    public void OnLadder(Vector3 position, Ladder currentLadder)
+    {
+        _anim.SetBool("onLadder", true);
+        _anim.SetFloat("Speed", 0f);
+        transform.position = position;
+        _activeLadder = currentLadder;
+        //_controller.enabled = false;
+        onLadder = true;
+    }
+    //public void LadderMountComplete()
+    //{
+    //    transform.position = _activeLadder.GetMountedPos();
+    //    _controller.enabled = true;
+    //}
 }
