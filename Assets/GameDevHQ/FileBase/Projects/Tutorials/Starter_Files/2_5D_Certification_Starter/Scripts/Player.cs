@@ -76,6 +76,10 @@ public class Player : MonoBehaviour
                     _yVelocity = _jumpHeight;
                     _anim.SetTrigger("Jumped");
                 }
+                if (Input.GetKeyDown(KeyCode.LeftShift) && _controller.velocity != Vector3.zero)
+                {
+                    _anim.SetTrigger("Roll");
+                }
             }
             else if (!_controller.isGrounded)
             {
