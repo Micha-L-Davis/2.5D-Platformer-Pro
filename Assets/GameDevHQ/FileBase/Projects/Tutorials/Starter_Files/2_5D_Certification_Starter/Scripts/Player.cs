@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     public bool onLadder;
     [SerializeField]
     float _climbSpeed = 3;
+    bool _exitLadder;
 
     void Start()
     {
@@ -49,15 +50,20 @@ public class Player : MonoBehaviour
         {
             _anim.SetTrigger("ClimbUp");
         }
-        if (onLadder)
+        if (onLadder && !_exitLadder)
         {
             float vertInput = Input.GetAxis("Vertical");
             _direction = new Vector3(0, vertInput, 0);
             _anim.SetFloat("ClimbSpeed", Mathf.Abs(vertInput));
             _velocity = _direction * _climbSpeed;
         }
-        else
+        else if (onLadder && _exitLadder)
         {
+            _controller.enabled = false;
+            _anim.SetTrigger("LadderExit");
+        }
+        else
+        { 
             if (_controller.isGrounded)
             {
                 _anim.SetBool("isGrounded", true);
@@ -104,6 +110,7 @@ public class Player : MonoBehaviour
     {
         transform.position = _activeLedge.GetStandPos();
         _anim.SetBool("LedgeGrab", false);
+        _anim.ResetTrigger("ClimbUp");
         _controller.enabled = true;
     }
 
@@ -145,4 +152,19 @@ public class Player : MonoBehaviour
     //    transform.position = _activeLadder.GetMountedPos();
     //    _controller.enabled = true;
     //}
+    public void ExitLadder()
+    {
+        _exitLadder = true;
+    }
+    public void LadderExitComplete()
+    {
+
+        transform.position = _activeLadder.GetEndPos();
+        _direction = Vector3.zero;
+        _anim.SetBool("onLadder", false);
+        _anim.ResetTrigger("LadderExit");
+        onLadder = false;
+        _exitLadder = false;
+        _controller.enabled = true;
+    }
 }

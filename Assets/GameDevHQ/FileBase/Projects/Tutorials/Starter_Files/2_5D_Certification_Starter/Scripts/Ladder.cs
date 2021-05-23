@@ -14,6 +14,7 @@ public class Ladder : MonoBehaviour
         if (_playerPresent && Input.GetKeyDown(KeyCode.E))
         {
             _player.OnLadder(_startPos.position, this);
+            _playerPresent = false;
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -27,13 +28,7 @@ public class Ladder : MonoBehaviour
             }
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Player" && _player.onLadder)
-        {
-            //_player.onLadder = false;
-        }
-    }
+
 
     public Vector3 GetEndPos()
     {
