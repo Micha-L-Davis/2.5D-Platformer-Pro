@@ -2768,22 +2768,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1375599338756319462, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_TagString
-      value: LedgeGrabChecker
-      objectReference: {fileID: 0}
-    - target: {fileID: 2351065317342581666, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4098028923916736386, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.794
-      objectReference: {fileID: 0}
-    - target: {fileID: 4098028923916736386, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.316
-      objectReference: {fileID: 0}
     - target: {fileID: 5034229139375489552, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2828,37 +2812,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5034229139375489556, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: _speed
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 5034229139375489556, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: _gravity
-      value: -3.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5034229139375489556, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: _jumpHeight
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 5034229139375489557, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5034229139375489557, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5034229139671190287, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5034229139680590025, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9167608670514171873, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99a84a1735be0884c86cd2c197df9295, type: 3}
