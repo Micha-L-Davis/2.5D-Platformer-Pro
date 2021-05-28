@@ -23,14 +23,19 @@ public class Player : MonoBehaviour
     [SerializeField]
     float _climbSpeed = 3;
     bool _exitLadder;
+    float _standingHeight;
+    float _standingCenter;
 
     void Start()
     {
+       
         _controller = gameObject.GetComponent<CharacterController>();
         if (_controller == null)
         {
             Debug.LogError("Character Controller is null");
         }
+        _standingHeight = _controller.height;
+        _standingCenter = _controller.center.y;
         _anim = gameObject.GetComponentInChildren<Animator>();
         if (_anim == null)
         {
@@ -79,6 +84,8 @@ public class Player : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.LeftShift) && _controller.velocity != Vector3.zero)
                 {
                     _anim.SetTrigger("Roll");
+                    _controller.height = 1.25f;
+                    _controller.center = new Vector3(0, .62f, 0);
                 }
             }
             else if (!_controller.isGrounded)
@@ -170,5 +177,11 @@ public class Player : MonoBehaviour
         onLadder = false;
         _exitLadder = false;
         _controller.enabled = true;
+    }
+
+    public void RollComplete()
+    {
+        _controller.height = _standingHeight;
+        _controller.center = new Vector3 (0, _standingCenter, 0);
     }
 }
